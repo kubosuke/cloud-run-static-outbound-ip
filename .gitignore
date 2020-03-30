@@ -1,3 +1,2 @@
-__pycache__
-**.pyc
-ssh_key*
+go.sum
+ssh_key

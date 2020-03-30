@@ -1,10 +1,12 @@
-# Static Outbound IP example for Cloud Run applications
+# Static Outbound IP example for Cloud Run applications (golang)
+
+me @kubosuke tweaked fork source repository for running `golang` app.
 
 This repository contains an example of a [Google Cloud Run][cr] application that
 runs an SSH tunnel through a GCE instance within the container to route outbound
 requests of the Cloud Run application through the static IP of the GCE instance.
 
-:warning: **Read the accompanying blog post as well:** https://ahmet.im/blog/cloud-run-static-ip/
+:warning: **Read the accompanying blog post of https://github.com/ahmetb as well:** https://ahmet.im/blog/cloud-run-static-ip/
 
 ## Before you begin
 
@@ -55,19 +57,12 @@ requests of the Cloud Run application through the static IP of the GCE instance.
 Take time to understand:
 
 - `entrypoint.sh`: runs a SSH client (as SOCKS5 TCP proxy server via GCE VM) and
-  the `flask` Python application server.
-
-  This script sets `HTTPS_PROXY=socks5://localhost:5000` environment variable to
-  the Python app to use the proxy. However, this `HTTPS_PROXY` environment
-  variable works the same way on many other languages, including **Go** as well.
+  the `golang` application server.
 
   By setting `HTTPS_PROXY` environment variable you don't need to update your
   code to use the SOCKS5 proxy.
 
-- `__init__.py` waits for the SSH port-forwarding server configured via
-  `HTTPS_PROXY` to be accessible.
-
-- `app.py`: starts a flask app querying https://ifconfig.me/ip and sends its
+- `main.go`: starts a go app querying https://ifconfig.me/ip and sends its
   result back.
 
 - `Dockerfile` invokes `entrypoint.sh` via `tini` init system.
@@ -107,14 +102,9 @@ Take time to understand:
 
 ## Query the application
 
-When you visit the application’s public URL, you will see that the IP address
+When you visit the `application’s public URL/ip/` , you will see that the IP address
 that it used to query https://ifconfig.me/ip is the IP address of the GCE
 instance.
-
-You can visit the application’s `/exit` endpoint to crash the Cloud Run
-container instance, which would normally have a new dynamic IP assigned to the
-instance, but in this case it remains the same as Cloud Run holds onto the
-request.
 
 ---
 

@@ -1,3 +1,0 @@
-Flask
-gunicorn        # since flask server isn't production-ready/concurrent
-requests[socks] # this ensures we can specify http_proxy with socks5://...
